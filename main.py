@@ -33,7 +33,7 @@ def initMain(webAddress):
     for round in rounds:
         driver.get(webAddress + '&team=&yymm=&r_round=' + round)
         mainXpath = '//*[@id="type1"]/div/table/tbody/tr['
-        resultXpath = '/td[10]/a'
+        resultXpath = '/td[10]/a[contains(text(), "상세결과")]'
         i = 1
         while True:
             main = mainXpath + str(i) + ']'
