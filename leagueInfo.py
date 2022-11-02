@@ -1,12 +1,19 @@
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-from driverAndSql import driverSetting, dbSetting, curserSetting
+from driver import setdriver
+from sql import setdb, setcurser, getquery
+from writeCSV import makefile
 
-driver = driverSetting()
-db = dbSetting()
-cursor = curserSetting(db)
+driver = setdriver()
+db = setdb()
+cursor = setcurser(db)
+
+infolist = []
+sql_rows = []
+
 
 # 년도와 라운드를 저장하는 함수
-def leagueAndRoundInfo(url, lastIndex):
+def getinfo(url, lastindex):
     driver.get(url)
     xpath = '//*[@id="pageheader"]/form/fieldset/div/a/span[1]'
     leagYr = driver.find_element(By.XPATH, xpath).text
@@ -14,14 +21,23 @@ def leagueAndRoundInfo(url, lastIndex):
     xpath = '//*[@class="wrp_date"]/form/fieldset/a[2]/span[1]'
     rnd = driver.find_element(By.XPATH, xpath).text
 
-    xpath = '//*[@id="type1"]/div/table/tbody/tr[1]/td[1]'
-    rndSrtDt = driver.find_element(By.XPATH, xpath).text.replace(' ', '')[:-3]
+    try:
+        xpath = '//*[@id="type1"]/div/table/tbody/tr[1]/td[1]'
+        rndSrtDt = driver.find_element(By.XPATH, xpath).text.replace(' ', '')[:-3]
 
-    xpath = '//*[@id="type1"]/div/table/tbody/tr[' + str(lastIndex) + ']/td[1]'
-    print(xpath)
-    rndEdDt = driver.find_element(By.XPATH, xpath).text.replace(' ', '')[:-3]
-    print(rndEdDt)
-    if rndEdDt == '':
-        xpath = '//*[@id="type1"]/div/table/tbody/tr[' + str(lastIndex-1) + ']/td[1]'
+        xpath = '//*[@id="type1"]/div/table/tbody/tr[' + str(lastindex) + ']/td[1]'
         rndEdDt = driver.find_element(By.XPATH, xpath).text.replace(' ', '')[:-3]
-    print(leagYr, rnd, rndSrtDt, rndEdDt)
+
+        if rndEdDt == '':
+            xpath = '//*[@id="type1"]/div/table/tbody/tr[' + str(lastindex-1) + ']/td[1]'
+            rndEdDt = driver.find_element(By.XPATH, xpath).text.replace(' ', '')[:-3]
+
+        infolist.append([leagYr, rnd, rndSrtDt, rndEdDt])
+        print(infolist)
+
+    except NoSuchElementException:
+        print('element 없음')
+        return True
+
+
+
