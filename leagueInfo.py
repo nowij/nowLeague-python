@@ -2,13 +2,13 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from driver import setdriver
 from sql import setdb, setcurser, getquery
+from gameInfo import setGameInfo
 from writeCSV import makefile
 
 driver = setdriver()
 db = setdb()
 cursor = setcurser(db)
 
-infolist = []
 sql_rows = []
 
 
@@ -32,8 +32,16 @@ def getinfo(url, lastindex):
             xpath = '//*[@id="type1"]/div/table/tbody/tr[' + str(lastindex-1) + ']/td[1]'
             rndEdDt = driver.find_element(By.XPATH, xpath).text.replace(' ', '')[:-3]
 
-        infolist.append([leagYr, rnd, rndSrtDt, rndEdDt])
-        print(infolist)
+        sql_row = '({},{},{},{})'.format(leagYr, rnd, rndSrtDt, rndEdDt)
+        sql_rows.append(sql_row)
+        insertQuery = getquery('TB_LEAGUE', sql_rows)
+        print('리그정보 ' + insertQuery)
+        # cursor.execute(insertQuery)
+        # db.commit()
+        sql_rows.clear()
+
+        setGameInfo('TB_LEAGUE', 'LEAG_YR,RND')
+
 
     except NoSuchElementException:
         print('element 없음')

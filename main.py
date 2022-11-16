@@ -2,7 +2,7 @@ import time
 
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-from gameResult import getgameeesult
+from gameResult import setGameResult
 from driver import setdriver
 from leagueInfo import getinfo
 
@@ -27,7 +27,7 @@ def initmain(webaddress):
                 i += 1
                 if gender == '여자':
                     href = driver.find_element(By.XPATH, main + resultXpath).get_attribute('href')
-                    #getgameeesult(href)
+                    setGameResult(href)
             except NoSuchElementException:
                 print('element 없음' + str(i))
                 if i > 1:
