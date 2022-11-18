@@ -25,15 +25,10 @@ def getquery(tablename, datas):
 
 
 def getupdatequery(tablename, condition, pk):
-    query = 'UPDATE ' + tablename + ' SET ' + condition + ' WHERE ' + pk
-    return query
-
-
-def getselectquery(tablename, columns):
-    query = 'SELECT ' + columns + ' FROM ' + tablename
+    query = 'UPDATE NL.' + tablename + ' SET ' + condition + ' WHERE ' + pk
     return query
 
 
 def getselectquery(tablename, columns, condition):
-    query = 'SELECT ' + columns + ' FROM ' + tablename + ' WHERE ' + condition
+    query = 'SELECT ' + columns + ' FROM NL.' + tablename + ' WHERE ' + condition
     return query

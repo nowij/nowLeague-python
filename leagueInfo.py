@@ -1,9 +1,7 @@
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from driver import setdriver
-from sql import setdb, setcurser, getquery
-from gameInfo import setGameInfo
-from writeCSV import makefile
+from sql import setdb, setcurser, getquery, getupdatequery
 
 driver = setdriver()
 db = setdb()
@@ -13,7 +11,7 @@ sql_rows = []
 
 
 # 년도와 라운드를 저장하는 함수
-def getinfo(url, lastindex):
+def setinfo(url, lastindex):
     driver.get(url)
     xpath = '//*[@id="pageheader"]/form/fieldset/div/a/span[1]'
     leagYr = driver.find_element(By.XPATH, xpath).text
@@ -38,11 +36,12 @@ def getinfo(url, lastindex):
         print('리그정보 ' + insertQuery)
         # cursor.execute(insertQuery)
         # db.commit()
+
+        updateQuery = getupdatequery('TB_GAME', 'RND = '+rnd, 'RND is null')
+        print(updateQuery)
+        # cursor.execute(updateQuery)
+        # db.commit()
         sql_rows.clear()
-
-        setGameInfo('TB_LEAGUE', 'LEAG_YR,RND')
-
-
     except NoSuchElementException:
         print('element 없음')
         return True

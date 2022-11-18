@@ -2,9 +2,9 @@ import time
 
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-from gameResult import setGameResult
+from gameResult import setgameresult
 from driver import setdriver
-from leagueInfo import getinfo
+from leagueInfo import setinfo
 
 # 시즌 리스트 변수, 링크 변수 선언
 seasons = ['001', '002', '003', '004', '005', '006', '007', '008', '009', '010', '011', '012', '013', '014', '015', '016', '017']
@@ -27,12 +27,13 @@ def initmain(webaddress):
                 i += 1
                 if gender == '여자':
                     href = driver.find_element(By.XPATH, main + resultXpath).get_attribute('href')
-                    setGameResult(href)
+                    setgameresult(href)
             except NoSuchElementException:
                 print('element 없음' + str(i))
                 if i > 1:
-                    isLastPage = getinfo(mainXpath, i-1)
-                    time.sleep(1)
+                    if setinfo(mainXpath, i-1):
+                        break
+                    break
                 break
 
         # NoAlertPresentException 경고창 관련 명령어를 실행했으나 현재 경고창이 뜨지 않음

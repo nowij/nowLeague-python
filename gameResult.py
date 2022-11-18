@@ -1,7 +1,8 @@
+import time
+
 from selenium.webdriver.common.by import By
 from driver import setdriver
 from sql import setdb, setcurser, getquery
-from gameInfo import setGameInfo
 
 driver = setdriver()
 db = setdb()
@@ -9,7 +10,7 @@ cursor = setcurser(db)
 isComplete = False
 
 # 상세결과 페이지의 데이터를 저장하는 함수
-def setGameResult(webaddress):
+def setgameresult(webaddress):
     driver.get(webaddress)
     gameDate = driver.find_element(By.XPATH, '//*[@id="wrp_content"]/article[1]/table/thead/tr/th').text.split(sep='/')
     gameDate = gameDate[0][0:-4].replace('  ', '').replace('년', '-').replace('월', '-').replace('일', '')
@@ -41,9 +42,15 @@ def setGameResult(webaddress):
     # cursor.execute(insertQuery)
     # db.commit()
 
-    isComplete = setGameInfo(gameDate, homeTeam, awayTeam)
-    if (isComplete):
-        driver.back()
+    year = driver.find_element(By.XPATH, '//*[@id="pageheader"]/form/fieldset/div/a/span[1]').text
+    sql_rows = []
+    sql_row = '({},{},{},{},{})'.format(year, gameDate, '', homeTeam, awayTeam)
+    sql_rows.append(sql_row)
+    insertQuery = getquery('TB_GAME', sql_rows)
+    print('게임정보 ' + insertQuery)
+
+    driver.back()
+
 
 
 

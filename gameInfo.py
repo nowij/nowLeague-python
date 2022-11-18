@@ -7,9 +7,11 @@ from sql import setdb, setcurser, getquery
 driver = setdriver()
 db = setdb()
 cursor = setcurser(db)
-year = driver.find_element(By.XPATH, '//*[@id="pageheader"]/form/fieldset/div/a/span[1]').text
 
-def setGameInfo(date,home,away):
+
+def setgameinfo(date, home, away):
+    year = driver.find_element(By.XPATH, '//*[@id="pageheader"]/form/fieldset/div/a/span[1]').text
+    print('확인 ' + year)
     sql_rows = []
     sql_row = '({},{},{},{},{})'.format(year, date, '', home, away)
     sql_rows.append(sql_row)
@@ -18,7 +20,3 @@ def setGameInfo(date,home,away):
     # cursor.execute(insertQuery)
     # db.commit()
     return True
-
-
-def setGameInfo(table, column):
-    pk = sql.getselectquery(table, column)
