@@ -19,16 +19,6 @@ def setcurser(db):
     return cursor
 
 
-def getquery(tablename, datas):
-    query = 'INSERT INTO NL.' + tablename + ' VALUES ' + ','.join(datas)
-    return query
-
-
-def getupdatequery(tablename, condition, pk):
-    query = 'UPDATE NL.' + tablename + ' SET ' + condition + ' WHERE ' + pk
-    return query
-
-
 def getselectquery(tablename, columns, condition):
     query = 'SELECT ' + columns + ' FROM NL.' + tablename + ' WHERE ' + condition
     return query
