@@ -13,7 +13,8 @@ url = 'https://www.kovo.co.kr/game/v-league/11110_schedule_list.asp?season='
 driver = setdriver()
 
 
-def initmain(webaddress):
+def initmain(url,season):
+    webaddress = url + season
     for round in rounds:
         mainXpath = webaddress + '&team=&yymm=&r_round=' + round
         driver.get(mainXpath)
@@ -29,11 +30,13 @@ def initmain(webaddress):
                     href = driver.find_element(By.XPATH, main + resultXpath).get_attribute('href')
                     setgameresult(href)
             except NoSuchElementException:
-                print('element 없음' + str(i))
+                print('===== [' + season + '] ' + round + 'Round Complete... And LeageInfo Start(' + str(i) + ') =====')
                 if i > 1:
-                    if setinfo(mainXpath, i-1):
+                    if setinfo(mainXpath, i-1, season, round):
+                        time.sleep(2)
                         break
                     break
+                print(">>>>> [" + season + "] " + round + "Round End...  Next Season/Round >>>>>")
                 break
 
         # NoAlertPresentException 경고창 관련 명령어를 실행했으나 현재 경고창이 뜨지 않음
@@ -45,8 +48,4 @@ def initmain(webaddress):
 
 
 for season in seasons:
-    # 한 페이지 테스트용으로 if문 설정 한 것 나중에 삭제
-    if season == '001':
-        initmain(url+season)
-    else:
-        print()
+    initmain(url,season)

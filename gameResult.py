@@ -2,7 +2,7 @@ import time
 
 from selenium.webdriver.common.by import By
 from driver import setdriver
-from sql import setdb, setcurser, getquery
+from sql import setdb, setcurser
 
 driver = setdriver()
 db = setdb()
@@ -30,24 +30,26 @@ def setgameresult(webaddress):
         awayScore.append(driver.find_element(By.XPATH, awayLink).text)
         count += 1
 
-    sql_rows = []
-    sql_row = '({},{},{},{},{},{},{},{},{})'.format(homeTeam, gameDate, homeSet, homeScore[0], homeScore[1],
-                                                    homeScore[2], homeScore[3], homeScore[4], homeResult)
-    sql_rows.append(sql_row)
-    sql_row = '({},{},{},{},{},{},{},{},{})'.format(awayTeam, gameDate, awaySet, awayScore[0], awayScore[1],
-                                                    awayScore[2], awayScore[3], awayScore[4], awayResult)
-    sql_rows.append(sql_row)
-    insertQuery = getquery('TB_GAME_RESULT', sql_rows)
-    print(insertQuery)
-    # cursor.execute(insertQuery)
-    # db.commit()
+    datas = []
+    data = (homeTeam, gameDate, homeSet,homeScore[0], homeScore[1],
+                homeScore[2], homeScore[3],homeScore[4], homeResult)
+    datas.append(data)
+    data = (awayTeam, gameDate, awaySet,awayScore[0], awayScore[1],
+                awayScore[2], awayScore[3],awayScore[4], awayResult)
+    datas.append(data)
+    insertQuery = "INSERT INTO NL.TB_GAME_RESULT VALUES(%s,STR_TO_DATE(%s, '%%Y-%%m-%%d'),%s,%s,%s,%s,%s,%s,%s)"
+    cursor.executemany(insertQuery, datas)
+    db.commit()
+    datas.clear()
 
     year = driver.find_element(By.XPATH, '//*[@id="pageheader"]/form/fieldset/div/a/span[1]').text
-    sql_rows = []
-    sql_row = '({},{},{},{},{})'.format(year, gameDate, '', homeTeam, awayTeam)
-    sql_rows.append(sql_row)
-    insertQuery = getquery('TB_GAME', sql_rows)
-    print('게임정보 ' + insertQuery)
+    data = (year, gameDate, '', homeTeam, awayTeam)
+    datas.append(data)
+    insertQuery = "INSERT INTO NL.TB_GAME VALUES(%s,STR_TO_DATE(%s, '%%Y-%%m-%%d'),%s,%s,%s)"
+    cursor.executemany(insertQuery, datas)
+    db.commit()
+    datas.clear()
+    time.sleep(1)
 
     driver.back()
 
