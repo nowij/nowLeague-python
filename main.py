@@ -7,7 +7,7 @@ from driver import setdriver
 from leagueInfo import setinfo
 
 # 시즌 리스트 변수, 링크 변수 선언
-seasons = ['001', '002', '003', '004', '005', '006', '007', '008', '009', '010', '011', '012', '013', '014', '015', '016', '017']
+seasons = ['001', '002', '003', '004', '005', '006', '007', '008', '009', '010', '011', '012', '013', '014', '015', '016', '017', '018']
 rounds = ['1', '2', '3', '4', '5', '6']
 url = 'https://www.kovo.co.kr/game/v-league/11110_schedule_list.asp?season='
 driver = setdriver()

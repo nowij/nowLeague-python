@@ -58,7 +58,7 @@ def setinfo(url, lastindex, season, round):
                     if (months[i-1] == months[i] and int(round) < 3):
                         rndEdDt = firstYear + '-' + rndEdDt.replace('.', '-')
                     elif (int(round) > 1 and 9 < months[i] < 13):
-                        rndSrtDt = firstYear + '-' + rndSrtDt.replace('.', '-')
+                        rndEdDt = firstYear + '-' + rndEdDt.replace('.', '-')
                     else:
                         rndEdDt = secondYear + '-' + rndEdDt.replace('.', '-')
 

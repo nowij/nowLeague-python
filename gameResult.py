@@ -23,6 +23,8 @@ def setgameresult(webaddress):
     homeScore = []
     awayScore = []
     count = 2
+    homeWinPoint = 0
+    awayWinPoint = 0
     while count < 7:
         homeLink = '//*[@class="inner_table"]/tbody/tr[1]/td[' + str(count) + ']'
         awayLink = '//*[@class="inner_table"]/tbody/tr[2]/td[' + str(count) + ']'
@@ -30,14 +32,30 @@ def setgameresult(webaddress):
         awayScore.append(driver.find_element(By.XPATH, awayLink).text)
         count += 1
 
+    # 승점 3점일 경우
+    if int(homeSet) >= 3:
+        if int(awaySet) <= 1:
+            homeWinPoint = 3
+        else:
+            homeWinPoint = 2
+            awayWinPoint = 1
+
+    # 승점 2점, 1점인 경우
+    elif int(awaySet) >= 3:
+        if int(homeSet) <= 1:
+            awayWinPoint = 3
+        else:
+            homeWinPoint = 1
+            awayWinPoint = 2
+
     datas = []
     data = (homeTeam, gameDate, homeSet,homeScore[0], homeScore[1],
-                homeScore[2], homeScore[3],homeScore[4], homeResult)
+                homeScore[2], homeScore[3],homeScore[4], homeResult, homeWinPoint)
     datas.append(data)
     data = (awayTeam, gameDate, awaySet,awayScore[0], awayScore[1],
-                awayScore[2], awayScore[3],awayScore[4], awayResult)
+                awayScore[2], awayScore[3],awayScore[4], awayResult, awayWinPoint)
     datas.append(data)
-    insertQuery = "INSERT INTO NL.TB_GAME_RESULT VALUES(%s,STR_TO_DATE(%s, '%%Y-%%m-%%d'),%s,%s,%s,%s,%s,%s,%s)"
+    insertQuery = "INSERT INTO NL.TB_GAME_RESULT VALUES(%s,STR_TO_DATE(%s, '%%Y-%%m-%%d'),%s,%s,%s,%s,%s,%s,%s,%s)"
     cursor.executemany(insertQuery, datas)
     db.commit()
     datas.clear()
